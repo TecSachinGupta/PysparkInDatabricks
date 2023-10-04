@@ -11,7 +11,17 @@ EXTRACT_YEAR_REGEX = "(?<=\()(\d+)(?=\))"
 
 # COMMAND ----------
 
-def get_adls_configs(scope_name, config_keys, storage_account_name = "alldatastore"):
+def get_adls_configs(scope_name, config_keys = ADLS_CONFIG_KEYS, storage_account_name = "alldatastore"):
+    """
+        Retruns the configs for mouting the Azure Storage.
+        Arguments:
+            scope_name: 
+            config_keys:
+            storage_account_name: 
+        Returns:
+            adls_mount_config: 
+            adls_spark_config:
+    """
     storage_app_client_id = dbutils.secrets.get(scope=scope_name, key=config_keys["client_id"])
     storage_app_tenent_id = dbutils.secrets.get(scope=scope_name, key=config_keys["tenent_id"])
     storage_app_secret_value = dbutils.secrets.get(scope=scope_name, key=config_keys["secret_value"])
@@ -29,8 +39,5 @@ def get_adls_configs(scope_name, config_keys, storage_account_name = "alldatasto
 
 # COMMAND ----------
 
-# get_adls_configs("azure-managed-secrets", ADLS_CONFIG_KEYS)
-
-# COMMAND ----------
 
 

@@ -1,4 +1,5 @@
 # Databricks notebook source
+from pyspark.sql import DataFrame
 import pyspark.sql.functions as F
 
 # COMMAND ----------
@@ -60,3 +61,27 @@ def read_tsv_file(file_path):
                 .option("compression", "gzip") \
                 .option("numPartitions", 10) \
                 .csv(file_path)
+
+# COMMAND ----------
+
+def csv_file_to_table(file_path, table_name, schema_str = None, has_headers = True):
+    df: DataFrame = None
+    if  schema_str is not None:
+        df = spark.read \
+                .option("header", True) \
+                .option("multiLine", "true") \
+                .option("quote", "\"") \
+                .option("escape", "\"") \
+                .option("ignoreTrailingWhiteSpace", True) \
+                .option("numPartitions", 10) \
+                .csv(file_path, schema = schema_str)
+    else:
+        df = spark.read \
+                .option("header", True) \
+                .option("multiLine", "true") \
+                .option("quote", "\"") \
+                .option("escape", "\"") \
+                .option("ignoreTrailingWhiteSpace", True) \
+                .option("numPartitions", 10) \
+                .csv(file_path)
+    df.write.format('delta').saveAsTable(table_name)
